@@ -4,16 +4,12 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'mobx-react';
-import TodoStore from './stores/todoStore';
-
-const store = {
-    TodoStore
-};
+import { stores } from './stores';
 
 ReactDOM.render(
-    <Provider {...store}>
+    <Provider {...stores}>
         <App />
-    </Provider>, 
+    </Provider>,
     document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
