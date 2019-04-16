@@ -21,6 +21,7 @@ export class NavMenu extends Component {
         });
     }
 
+
     render() {
         return (
             <header>
@@ -41,6 +42,9 @@ export class NavMenu extends Component {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/todo-list">Todoes</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/animal-list">Animals</NavLink>
                                 </NavItem>
                             </ul>
                         </Collapse>

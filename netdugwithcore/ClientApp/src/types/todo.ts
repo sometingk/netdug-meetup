@@ -1,72 +1,76 @@
 ﻿import { observable, autorun, reaction, computed } from 'mobx';
 import uuid from 'uuid';
 import axios from 'axios';
+import { debug } from 'util';
+import { TodoStore } from '../stores/todoStore';
 
-export default class Todo {
-    id: number;
-    title: string;
-    isCompleted: boolean;
+interface ITodo {
+    id: string,
+    title: string,
+    isCompleted: boolean
+}
 
+export default class Todo implements ITodo {
+    /**
+         * unique id of this todo, immutable.
+         */
+    id = "";
 
-    store:any = null;
+    @observable isCompleted = false;
+    @observable title = "";
+
+    store: any = null;
+
+    /**
+     * Indicates whether changes in this object
+     * should be submitted to the server
+     */
     autoSave: boolean = true;
 
-    saveHandler:any = null;
-    url:string = `api/todoes`;
-
-    constructor(store: any, id: any = uuid.v4()) {
-
-        console.log(`firing the constructor ${JSON.stringify(this)}`);
+    /**
+     * 
+     * Disposer for the side effect that automatically
+     * stores this Todo, see @dispose.
+     */
+    saveHandler: any = null;
+    constructor(store: TodoStore, title: string, id: string) {
+        console.log('got here');
+        this.title = title;
         this.store = store;
         this.id = id;
-        this.title = "";
         this.isCompleted = false;
-
-
-        this.saveHandler = reaction(
-            // observe everything that is used in the JSON:
-            () => this.asJson,
-            // if autoSave is on, send json to server
-            async (json) => {
-                console.log(`Firing the call to the transport layer. ${JSON.stringify(json)}`);
-                if (this.autoSave) {
-                    const result = await axios.post(`api/Todoes`, json);
-                    console.log(`Data: ${JSON.stringify(result.data)}`);
-                }
-            }
-        );
     }
 
-    delete = async () => {
-        try {
-            const result = await axios.delete(`${this.url}/${this.id}`);
-            const data = result.data;
-            this.store.removeTodo(this);
-        } catch (err) {
-            console.log(`Error : ${err}`);
-        } finally {
-        }
+    /**
+     * Remove this todo from the client and server
+     */
+    delete() {
+        this.store.transportLayer.deleteTodo(this.id);
+        this.store.removeTodo(this);
     }
-
 
     @computed get asJson() {
-        console.log(`Computing the asJson.`);
         return {
             id: this.id,
             isCompleted: this.isCompleted,
-            title: this.title
-        }
+            title: this.title,
+        };
     }
 
+    /**
+     * Update this todo with information from the server
+     */
     updateFromJson(json: any) {
+        // make sure our changes aren't sent back to the server
         this.autoSave = false;
         this.isCompleted = json.isCompleted;
         this.title = json.title;
         this.autoSave = true;
     }
 
-    dispose() {
+    dispose = () => {
         // clean up the observer
         this.saveHandler();
     }
+
 }

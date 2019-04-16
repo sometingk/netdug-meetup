@@ -5,6 +5,7 @@ import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import TodoList from './components/TodoList';
 import { Counter } from './components/Counter';
+import AnimalList from './components/Animals/animalList';
 import { IMobxStore } from './stores/mobxStore';
 import { ITodoStore } from './stores/todoStore';
 
@@ -14,12 +15,13 @@ export default class App extends Component {
 
     render() {
         return (
-                <Layout>
-                    <Route exact path='/' component={Home} />
-                    <Route path='/counter' component={Counter} />
-                    <Route path='/fetch-data' component={FetchData} />
-                    <Route path='/todo-list' component={TodoList} />
-                </Layout>
+            <Layout>
+                <Route exact path='/' component={Home} />
+                <Route path='/counter' component={Counter} />
+                <Route path='/fetch-data' component={FetchData} />
+                <Route path='/todo-list' component={TodoList} />
+                <Route path='/animal-list' component={AnimalList} />
+            </Layout>
         );
     }
 }

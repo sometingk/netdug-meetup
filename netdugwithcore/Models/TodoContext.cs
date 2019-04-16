@@ -15,5 +15,6 @@ namespace netdugwithcore.Models
         }
 
         public DbSet<Todo> Todos { get; set; }
+        public DbSet<Animal> Animals { get; set; }
     }
 }

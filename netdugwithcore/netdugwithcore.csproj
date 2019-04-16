@@ -26,22 +26,30 @@
   <ItemGroup>
     <None Remove="ClientApp\src\App.tsx" />
     <None Remove="ClientApp\src\components\addTodoItem.tsx" />
+    <None Remove="ClientApp\src\components\Animals\addAnimal.tsx" />
+    <None Remove="ClientApp\src\components\Animals\animalList.tsx" />
     <None Remove="ClientApp\src\components\todoItem.tsx" />
     <None Remove="ClientApp\src\components\TodoList.tsx" />
+    <None Remove="ClientApp\src\stores\animalStore.ts" />
     <None Remove="ClientApp\src\stores\index.ts" />
     <None Remove="ClientApp\src\stores\mobxStore.ts" />
     <None Remove="ClientApp\src\stores\todoStore.ts" />
+    <None Remove="ClientApp\src\types\animal.ts" />
     <None Remove="ClientApp\src\types\todo.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\App.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\addTodoItem.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Animals\addAnimal.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\Animals\animalList.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\todoItem.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\TodoList.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\stores\animalStore.ts" />
     <TypeScriptCompile Include="ClientApp\src\stores\index.ts" />
     <TypeScriptCompile Include="ClientApp\src\stores\mobxStore.ts" />
     <TypeScriptCompile Include="ClientApp\src\stores\todoStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\types\animal.ts" />
     <TypeScriptCompile Include="ClientApp\src\types\todo.ts" />
   </ItemGroup>
 
