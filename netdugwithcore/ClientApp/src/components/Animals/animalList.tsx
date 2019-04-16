@@ -14,23 +14,28 @@ class AnimalList extends Component<AnimalListProps> {
 
 
     render() {
-        //const { animals } = this.props!.animalStore;
+        const { animalStore} = this.props;
 
 
         return (
             <div>
-                <h4>Animals</h4>
                 <AddAnimal />
+                <hr />
+                <h4>Animals</h4>
                 <ul>
                     {
                         (this.props!.animalStore && this.props!.animalStore.animals) && this.props!.animalStore.animals.map((animal, key) => {
-                            return <ul key={key}>{animal.name}</ul>
+                            return <ul key={key}>{animal.name} - {animal.details} On hand: {animal.count}</ul>
                         })
                     }
                 </ul>
+                <div>
+                    Total animals: {animalStore!.animalCount}
+                </div>
             </div>
         )
     }
 }
+
 
 export default AnimalList;

@@ -73,12 +73,21 @@ namespace netdugwithcore.Controllers
 
         // POST: api/Animals
         [HttpPost]
-        public async Task<ActionResult<Animal>> PostAnimal(Animal animal)
+        public async Task<ActionResult<Animal>> PostAnimal([FromBody]Animal animal)
         {
-            _context.Animals.Add(animal);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Animals.Add(animal);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAnimal", new { id = animal.id }, animal);
+                return CreatedAtAction("GetAnimal", new { id = animal.id }, animal);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
         }
 
         // DELETE: api/Animals/5

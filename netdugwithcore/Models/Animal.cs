@@ -11,5 +11,7 @@ namespace netdugwithcore.Models
         [Key]
         public int id { get; set; }
         public string Name { get; set; }
+        public string Details { get; set; }
+        public int Count { get; set; }
     }
 }

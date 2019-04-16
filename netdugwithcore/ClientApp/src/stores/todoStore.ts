@@ -61,7 +61,6 @@ export class TodoStore {
      * Creates a fresh todo on the client and server
      */
     private createTodo = () => {
-        debugger;
         var todo = new Todo(this, "test", "1");
         todo.title = 'Test';
         todo.isCompleted = false;

@@ -1,58 +1,40 @@
-﻿import { AnimalStore } from "../stores/animalStore";
-import axios from 'axios';
-import { reaction, computed } from 'mobx';
+﻿import axios from 'axios';
+import { action, computed } from 'mobx';
 
 export class Animal {
     id: number;
     name: string = "";
-    store: any = null;
-    saveHandler = reaction(
-        () => this.asJson,
-        (json) => {
-            this.saveAnimal();
-        }
-    );
+    details: string = "";
+    count: number = 0;
 
-    constructor(store: AnimalStore, id: number, animalName: string) {
+    constructor(id: number, animalName: string, details: string, count: number) {
         console.log('firing constructor')
-        this.store = store!;
         this.id = id;
         this.name = animalName;
+        this.details = details;
+        this.count = count | 0;
     }
 
+    @action
     changeName = (newName: string) => {
         this.name = newName;
         console.log(`NewName: ${this.name}`);
     }
 
 
-    updateFromJson(json: any) {
-        // make sure our changes aren't sent back to the server
-        this.id = json.id;
-        this.name = json.name;
-    }
-
-    saveAnimal = async () => {
-        try {
-            const result = await axios.post(`/api/animals`, this);
-            this.store!.animals.push()
-        } catch (err) {
-            console.log(err);
-        }
+    //updateFromJson(json: any) {
+    //    // make sure our changes aren't sent back to the server
+    //    this.id = json.id;
+    //    this.name = json.name;
+    //}
 
 
-    }
-
-    @computed get asJson() {
-        console.log('asJson');
-        return {
-            id: this.id,
-            completed: this.name
-        };
-    }
-
-    dispose() {
-        this.saveHandler();
-    }
+    //@computed get asJson() {
+    //    console.log('asJson');
+    //    return {
+    //        id: this.id,
+    //        completed: this.name
+    //    };
+    //}
 
 }
