@@ -1,6 +1,6 @@
-﻿import { observable, action, computed } from 'mobx';
+﻿import { observable, action, computed, when, reaction, autorun, flow, runInAction } from 'mobx';
 import { Animal } from '../types/animal';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 
 export interface IAnimalStore {
@@ -10,6 +10,7 @@ export interface IAnimalStore {
     updateAnimal(animal: Animal): void;
     addAnimal(animal: Animal): void;
 }
+
 
 export class AnimalStore {
     @observable animals = Array<Animal>();
@@ -34,13 +35,13 @@ export class AnimalStore {
         }
     }
 
-    @action addAnimal = async (id: number, name: string, details:string, count:number): Promise<Animal> => {
+    @action addAnimal = async (id: number, name: string, details: string, count: number): Promise<Animal> => {
         const newAnimal = new Animal(id, name, details, count);
         await this.saveAnimal(newAnimal);
         return newAnimal;
     }
 
-    saveAnimal = async (animal: Animal): Promise<Animal>  => {
+    saveAnimal = async (animal: Animal): Promise<Animal> => {
         try {
             console.log(`saving animal: ${JSON.stringify(animal)}`);
             const result = await axios.post(`/api/animals`, animal);
@@ -58,9 +59,56 @@ export class AnimalStore {
             const result = await axios.get(`/api/animals`);
 
             console.log(`Animals: ${JSON.stringify(result.data)}`);
-            this.animals = result.data as Array<Animal>;
+            // has to do the run in action in order to force state management only inside an action.
+            // flows seem like a better option.
+            runInAction(() => {
+                this.animals = result.data as Array<Animal>;
+            })
+            
         } catch (err) {
             console.log(err);
         }
     }
+
+    //loadingAnimals = flow(function* () {
+    //    try {
+    //        const results: AxiosResponse = yield axios.get(`/api/animals`);
+    //        this.animals = results.data as Array<Animal>;
+    //    } catch (err) {
+
+    //        console.log(err);
+    //    }
+    //});
+
+    tooMany = (a: Animal) => {
+        console.log(`testing animal`);
+        return a.count > 10;
+    }
+
+    // This fires once when we see the large number of animals fired.
+    notifyTooMany = when(() => this.animals.some(this.tooMany),
+        () => {
+            const a = this.animals.find(this.tooMany);
+            console.log(`We have too many ${a!.name} ${a!.count}`);
+        });
+
+
+    // Reaction stuff
+    notifyTooManyAllTheTime = reaction(
+        () => this.animals.map(animal => animal.name),
+        names => console.log("Reacting to change", names.join(", "))
+    )
+
+    countReaction = reaction(
+        () => this.animalCount,
+        (count, reaction) => {
+            console.log(`Count reaction invoked: counter count ${count}`)
+        }
+    );
+
+    // autorun
+    autoRunTest = autorun(
+        () => console.log("Autorun: ", this.animals.map(animal => animal.name).join(", "))
+    );
+
 }

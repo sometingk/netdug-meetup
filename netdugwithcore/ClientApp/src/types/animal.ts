@@ -15,6 +15,10 @@ export class Animal {
         this.count = count | 0;
     }
 
+    @computed get hasMany() {
+        return this.count > 2;
+    }
+
     @action
     changeName = (newName: string) => {
         this.name = newName;
